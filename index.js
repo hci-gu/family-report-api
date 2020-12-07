@@ -3,10 +3,10 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const { Sequelize, Model, DataTypes } = require('sequelize')
 
-const { DB_URI } = process.env
+const { DATABASE_URL } = process.env
 
-const sequelize = DB_URI
-  ? new Sequelize({ uri: DB_URI })
+const sequelize = DATABASE_URL
+  ? new Sequelize({ url: DATABASE_URL, dialect: 'postgres' })
   : new Sequelize('sqlite::memory:')
 
 // setup API
