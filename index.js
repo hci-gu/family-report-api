@@ -26,26 +26,40 @@ User.init(
 app.get('/', (req, res) => res.send('Hello world'))
 
 app.get('/users', async (req, res) => {
-  const users = await User.findAll()
+  console.log('GET /users')
 
-  res.send(users)
+  try {
+    const users = await User.findAll()
+
+    res.send(users)
+  } catch (err) {
+    res.send(err.message)
+  }
 })
 
 app.post('/users', async (req, res) => {
-  const { username } = req.body
-  const user = await User.create({ username })
-  res.send(user)
+  console.log('POST /users', req.body)
+  try {
+    const { username } = req.body
+    const user = await User.create({ username })
+    res.send(user)
+  } catch (err) {
+    res.send(err.message)
+  }
 })
 
 app.delete('/users/:id', async (req, res) => {
-  const { id } = req.params
-  console.log('DELETE', id)
+  try {
+    const { id } = req.params
+    console.log('DELETE /users/:id', id)
 
-  const user = await User.findOne({ where: { id } })
-  console.log('found user', user)
-  await user.destroy()
+    const user = await User.findOne({ where: { id } })
+    await user.destroy()
 
-  res.sendStatus(200)
+    res.sendStatus(200)
+  } catch (err) {
+    res.send(err.message)
+  }
 })
 
 app.listen(8080)
