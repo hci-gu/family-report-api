@@ -3,10 +3,33 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const { Sequelize, Model, DataTypes } = require('sequelize')
 
-const { DATABASE_URL } = process.env
+const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB } = process.env
 
-console.log('connecting to', DATABASE_URL)
-const sequelize = new Sequelize(DATABASE_URL ? DATABASE_URL : 'sqlite::memory:')
+if (DB) {
+  console.log('connecting to', {
+    DB_HOST,
+    DB_PORT,
+    DB_USERNAME,
+    DB_PASSWORD,
+    DB,
+  })
+}
+const sequelize = DB
+  ? new Sequelize({
+      database: DB,
+      username: DB_USERNAME,
+      password: DB_PASSWORD,
+      host: DB_HOST,
+      port: DB_PORT,
+      dialect: 'postgres',
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
+    })
+  : new Sequelize('sqlite::memory')
 
 // setup API
 const app = express()
