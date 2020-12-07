@@ -5,9 +5,8 @@ const { Sequelize, Model, DataTypes } = require('sequelize')
 
 const { DATABASE_URL } = process.env
 
-const sequelize = DATABASE_URL
-  ? new Sequelize({ url: DATABASE_URL, dialect: 'postgres' })
-  : new Sequelize('sqlite::memory:')
+console.log('connecting to', DATABASE_URL)
+const sequelize = new Sequelize(DATABASE_URL ? DATABASE_URL : 'sqlite::memory:')
 
 // setup API
 const app = express()
